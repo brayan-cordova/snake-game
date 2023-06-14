@@ -30,10 +30,36 @@ snake.speed(2)  # speed snake.
 snake.shape("square")  # snake shape.
 snake.penup()  # i give him the instruction not to draw.
 snake.goto(0, 0)  # starting point for snake.
-snake.direction = "left"  # when the program end, restart the game.
+snake.direction = "stop"  # when the program end, restart the game.
 snake.color("green")  # snake color
 
 ##### End - Building Snake #####
+
+
+##### Start - movements of the snake with the keys up, down, right, left #####
+
+
+# up
+def up():
+    snake.direction = "up"
+
+
+# down
+def down():
+    snake.direction = "down"
+
+
+# right
+def right():
+    snake.direction = "right"
+
+
+# left
+def left():
+    snake.direction = "left"
+
+
+##### End - movements of the snake with the keys up, down, right, left #####
 
 
 ###### Start - Snake Movement #####
@@ -59,6 +85,14 @@ def movement():
     if snake.direction == "left":
         x = snake.xcor()  # shows object's location on the y-axis.
         snake.setx(x - 20)
+
+
+# Key Mapping
+s.listen()  # screen listen
+s.onkeypress(up, "Up")  # up key press
+s.onkeypress(down, "Down")  # down key press
+s.onkeypress(right, "Right")  # right key press
+s.onkeypress(left, "Left")  # left key press
 
 
 while True:
