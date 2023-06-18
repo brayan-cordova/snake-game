@@ -14,6 +14,10 @@ import random
 # delay for snake
 delay = 0.1
 
+# score marker
+score = 0
+high_score = 0
+
 ###### Start - Customizing the game #####
 
 s = turtle.Screen()  # show screen.
@@ -45,13 +49,17 @@ food.speed(0)
 ##### End - Building Snake #####
 
 
-##### Start - Body Snake #####
-
 # body for snake
 body = []
 
-##### End - Body Snake #####
-
+# show the score
+text = turtle.Turtle()
+text.speed(0)
+text.color("white")
+text.penup()
+text.hideturtle()
+text.goto(0, 260)
+text.write("Score: 0\t\tHigh Score: 0", align="center", font=("verdana", 24, "normal"))
 
 ##### Start - movements of the snake with the keys up, down, right, left #####
 
@@ -130,6 +138,15 @@ while True:
         snake.direction = "stop"
         body.clear()
 
+        # reset score
+        score = 0
+        text.clear()
+        text.write(
+            "Score:{}\t\tHigher Score:{}".format(score, high_score),
+            align="center",
+            font=("verdana", 24, "normal"),
+        )
+
     # food movement
     if snake.distance(food) < 20:
         x = random.randint(-250, 250)
@@ -144,6 +161,17 @@ while True:
         new_body.goto(0, 0)
         new_body.speed(0)
         body.append(new_body)  # adding new body, but not follow the snake
+
+        # score
+        score += 10
+        if score > high_score:
+            high_score = score
+            text.clear()
+            text.write(
+                "Score:{}\t\tHigher Score:{}".format(score, high_score),
+                align="center",
+                font=("verdana", 24, "normal"),
+            )
 
     total = len(body)  # return the body len
     for i in range(total - 1, 0, -1):  # we go through the list
