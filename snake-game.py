@@ -14,6 +14,10 @@ import random
 # delay for snake
 delay = 0.1
 
+# score marker
+score = 0
+high_score = 0
+
 ###### Start - Customizing the game #####
 
 s = turtle.Screen()  # show screen.
@@ -34,7 +38,6 @@ snake.goto(0, 0)  # starting point for snake.
 snake.direction = "stop"  # when the program end, restart the game.
 snake.color("green")  # snake color
 
-
 # food for snake
 food = turtle.Turtle()
 food.shape("circle")
@@ -43,9 +46,20 @@ food.penup()
 food.goto(0, 100)
 food.speed(0)
 
-
 ##### End - Building Snake #####
 
+
+# body for snake
+body = []
+
+# show the score
+text = turtle.Turtle()
+text.speed(0)
+text.color("white")
+text.penup()
+text.hideturtle()
+text.goto(0, 260)
+text.write("Score: 0\t\tHigh Score: 0", align="center", font=("verdana", 24, "normal"))
 
 ##### Start - movements of the snake with the keys up, down, right, left #####
 
@@ -108,13 +122,81 @@ s.onkeypress(left, "Left")  # left key press
 
 while True:
     s.update()  # update the screen with information
+
+    # game edges
+    if (
+        snake.xcor() > 300
+        or snake.xcor() < -300
+        or snake.ycor() > 300
+        or snake.ycor() < -300
+    ):
+        time.sleep(2)
+        for i in body:
+            i.clear()
+            i.hideturtle()
+        snake.home()
+        snake.direction = "stop"
+        body.clear()
+
+        # reset score
+        score = 0
+        text.clear()
+        text.write(
+            "Score:{}\t\tHigher Score:{}".format(score, high_score),
+            align="center",
+            font=("verdana", 24, "normal"),
+        )
+
     # food movement
     if snake.distance(food) < 20:
         x = random.randint(-250, 250)
         y = random.randint(-250, 250)
         food.goto(x, y)
-    #
+
+        # food for snake
+        new_body = turtle.Turtle()
+        new_body.shape("square")
+        new_body.color("green")
+        new_body.penup()
+        new_body.goto(0, 0)
+        new_body.speed(0)
+        body.append(new_body)  # adding new body, but not follow the snake
+
+        # score
+        score += 10
+        if score > high_score:
+            high_score = score
+            text.clear()
+            text.write(
+                "Score:{}\t\tHigher Score:{}".format(score, high_score),
+                align="center",
+                font=("verdana", 24, "normal"),
+            )
+
+    total = len(body)  # return the body len
+    for i in range(total - 1, 0, -1):  # we go through the list
+        # we got coordinates of the new body of the snake are obtained
+        x = body[i - 1].xcor()
+        y = body[i - 1].ycor()
+        body[i].goto(x, y)  # we send the new created body to the serpent
+
+    if total > 0:
+        x = snake.xcor()
+        y = snake.ycor()
+        body[0].goto(x, y)
+
     movement()
+
+    # collisions with body
+    for i in body:
+        if i.distance(snake) < 20:
+            for i in body:
+                i.clear()
+                i.hideturtle()
+            snake.home()
+            body.clear()
+            snake.direction = "stop"
+
     time.sleep(delay)  # delay for snake
 
 ##### End - Snake Movement #####
