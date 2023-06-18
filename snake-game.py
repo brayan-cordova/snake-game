@@ -114,6 +114,22 @@ s.onkeypress(left, "Left")  # left key press
 
 while True:
     s.update()  # update the screen with information
+
+    # game edges
+    if (
+        snake.xcor() > 300
+        or snake.xcor() < -300
+        or snake.ycor() > 300
+        or snake.ycor() < -300
+    ):
+        time.sleep(2)
+        for i in body:
+            i.clear()
+            i.hideturtle()
+        snake.home()
+        snake.direction = "stop"
+        body.clear()
+
     # food movement
     if snake.distance(food) < 20:
         x = random.randint(-250, 250)
@@ -142,6 +158,17 @@ while True:
         body[0].goto(x, y)
 
     movement()
+
+    # collisions with body
+    for i in body:
+        if i.distance(snake) < 20:
+            for i in body:
+                i.clear()
+                i.hideturtle()
+            snake.home()
+            body.clear()
+            snake.direction = "stop"
+
     time.sleep(delay)  # delay for snake
 
 ##### End - Snake Movement #####
