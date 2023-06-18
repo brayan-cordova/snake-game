@@ -34,7 +34,6 @@ snake.goto(0, 0)  # starting point for snake.
 snake.direction = "stop"  # when the program end, restart the game.
 snake.color("green")  # snake color
 
-
 # food for snake
 food = turtle.Turtle()
 food.shape("circle")
@@ -43,8 +42,15 @@ food.penup()
 food.goto(0, 100)
 food.speed(0)
 
-
 ##### End - Building Snake #####
+
+
+##### Start - Body Snake #####
+
+# body for snake
+body = []
+
+##### End - Body Snake #####
 
 
 ##### Start - movements of the snake with the keys up, down, right, left #####
@@ -113,7 +119,28 @@ while True:
         x = random.randint(-250, 250)
         y = random.randint(-250, 250)
         food.goto(x, y)
-    #
+
+        # food for snake
+        new_body = turtle.Turtle()
+        new_body.shape("square")
+        new_body.color("green")
+        new_body.penup()
+        new_body.goto(0, 0)
+        new_body.speed(0)
+        body.append(new_body)  # adding new body, but not follow the snake
+
+    total = len(body)  # return the body len
+    for i in range(total - 1, 0, -1):  # we go through the list
+        # we got coordinates of the new body of the snake are obtained
+        x = body[i - 1].xcor()
+        y = body[i - 1].ycor()
+        body[i].goto(x, y)  # we send the new created body to the serpent
+
+    if total > 0:
+        x = snake.xcor()
+        y = snake.ycor()
+        body[0].goto(x, y)
+
     movement()
     time.sleep(delay)  # delay for snake
 
